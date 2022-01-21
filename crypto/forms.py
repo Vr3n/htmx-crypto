@@ -1,9 +1,23 @@
 from django import forms
 from django.urls import reverse_lazy
+from datetime import date
+from django.core.exceptions import ValidationError
+
 from .models import Transaction
 
 class DateInput(forms.DateInput):
     input_type = "date"
+
+
+def convert_to_negative_value(data):
+    """
+    if the user entered a value and it's higher > 0, we wil convert to a,
+    negative value.
+    """
+
+    if data and data > 0:
+        data = data * -1
+    return data
 
 class TransactionForm(forms.ModelForm):
     class Meta:
@@ -79,12 +93,29 @@ class TransactionForm(forms.ModelForm):
             ),
         }
 
-        """
-        if the user entered a value and it's higher > 0, we wil convert to a,
-        negative value.
-        """
-        def clean_sold_currency_amount(self):
-            data = self.cleaned_data["sold_currency_amount"]
-            if data and data > 0:
-                data = data * -1
-            return data
+    """
+    if the user entered a value and it's higher > 0, we wil convert to a,
+    negative value.
+    """
+    def clean_sold_currency_amount(self):
+        data = self.cleaned_data["sold_currency_amount"]
+        return convert_to_negative_value(data)
+
+    def clean_sold_currency_fee(self):
+        data =self.cleaned_data["sold_currency_fee"]
+        return convert_to_negative_value(data)
+
+    def clean_sold_currency_fee(self):
+        data =self.cleaned_data["sold_currency_fee"]
+        return convert_to_negative_value(data)
+
+    """
+    If user enters future date for transaction throw validation error.
+    """
+
+    def clean_date(self):
+        data = self.cleaned_data["date"]
+
+        if data > date.today():
+            raise ValidationError("You can't enter a future transaction!")
+        return data
