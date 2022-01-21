@@ -1,0 +1,59 @@
+<!-- Transaction Form -->
+
+{% load crispy_forms_tags %}
+
+<form class="container">
+    <div class="form-row row-eq-spacing-sm">
+        <div class="col-sm">
+            {{ form.date|as_crispy_field  }}
+        </div>
+        <div class="col-sm">
+            {{ form.exchange|as_crispy_field  }}
+        </div>
+    </div>
+    <div class="form-row row-eq-spacing">
+
+        <div class="col-6 mt-5">
+           <label class="required font-weight-bold">
+           Paid / Sent / Withdrawn</label>      
+        </div>
+
+        <div class="col-6 mt-5">
+            <label class="required font-weight-bold">
+            Bought / Received / Deposited</label>
+        </div>
+
+        <div class="col-6 mt-5">
+            {{form.sold_currency_amount|as_crispy_field}}
+        </div>
+        
+        <div class="col-6 mt-5">
+            {{form.bought_currency_amount|as_crispy_field}}
+        </div>
+    
+        <div class="col-6 mt-5">
+            {{form.sold_currency|as_crispy_field}}
+
+            <!-- Currency suggetions -->
+            <div id="results_sold"></div>
+        </div>
+
+        <div class="col-6 mt-5">
+            {{form.bought_currency|as_crispy_field}}
+        </div>
+ 
+        <div class="col-6 mt-5">
+            {{form.sold_currency_fee|as_crispy_field}}
+        </div>
+
+        <div class="col-6 mt-5">
+            {{form.bought_currency_fee|as_crispy_field}}
+        </div>
+   
+   </div>
+    
+   <div class="text-left">
+        <button class="btn btn-primary"> Submit </button>
+   </div>
+
+</form>
