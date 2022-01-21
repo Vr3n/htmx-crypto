@@ -105,8 +105,8 @@ class TransactionForm(forms.ModelForm):
         data =self.cleaned_data["sold_currency_fee"]
         return convert_to_negative_value(data)
 
-    def clean_sold_currency_fee(self):
-        data =self.cleaned_data["sold_currency_fee"]
+    def clean_bought_currency_fee(self):
+        data =self.cleaned_data["bought_currency_fee"]
         return convert_to_negative_value(data)
 
     """
