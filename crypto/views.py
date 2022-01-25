@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 from .models import Transaction
 from .forms import TransactionForm
 
@@ -42,4 +43,35 @@ def transactions(request):
         request,
         "components/transactions.html",
         {"transactions": transactions},
+    )
+
+
+def transaction_update(request, transaction_pk):
+    transaction = get_object_or_404(Transaction, pk=transaction_pk)
+    inline_form = TransactionForm(instance=transaction)
+    # new
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            transaction = form.save()
+            return render(
+                request,
+                "components/transaction_detail.html",
+                {"transaction": transaction},
+            )
+        else:
+            return render(
+                request,
+                "components/transaction_update.html",
+                {
+                    "inline_form": inline_form,
+                    "transaction": transaction,
+                    "errors": form.errors,
+                },
+            )
+    # end new
+    return render(
+        request,
+        "components/transaction_update.html",
+        {"inline_form": inline_form, "transaction": transaction},
     )
