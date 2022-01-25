@@ -8,6 +8,23 @@
   </div>
 
   <div class="col-3">
+    <p class="d-block" id="default-price-{{ transaction.pk }}">
+      {{ transaction.price|floatformat:9 }} {{ transaction.sold_currency }} per
+      1 {{ transaction.bought_currency }}
+    </p>
+    <p class="d-none" id="alt-price-{{ transaction.pk }}">
+      {{ transaction.alt_price|floatformat:9 }} {{ transaction.sold_currency }}
+      per 1 {{ transaction.bought_currency }}
+    </p>
+    <button
+      class="btn"
+      _="on click toggle between .d-none and .d-block on #alt-price-{{ transaction.pk }} then toggle between .d-none and .d-block on #default-price-{{transaction.pk}} "
+    >
+      Flip the price
+    </button>
+  </div>
+
+  <div class="col-3">
     <p>
       {{transaction.sold_currency_amount|floatformat:2}}
       {{transaction.sold_currency}}

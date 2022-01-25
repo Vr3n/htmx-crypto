@@ -5,6 +5,7 @@ from datetime import date
 
 # Create your models here.
 
+
 class Transaction(models.Model):
 
     user = models.ForeignKey(
@@ -27,7 +28,7 @@ class Transaction(models.Model):
         blank=True,
         decimal_places=10
     )
-    
+
     bought_currency = models.CharField(max_length=3)
     bought_currency_amount = models.DecimalField(
         max_digits=19,
@@ -47,8 +48,11 @@ class Transaction(models.Model):
     class Meta:
         ordering = ["-date"]
 
-    def __str__(self):
-        return f"{self.user.email} on {self.exchange} - {self.date}"
+    def alt_price(self):
+        price = (self.bought_currency_amount + self.bought_currency_fee) / (
+            self.sold_currency_amount + self.sold_currency_fee
+        )
+        return price
 
     def save(self, *args, **kwargs):
 
@@ -62,5 +66,7 @@ class Transaction(models.Model):
             self.bought_currency_amount + self.bought_currency_fee
         )
 
-
         super(Transaction, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.email} on {self.exchange} - {self.date}"
