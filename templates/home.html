@@ -13,7 +13,10 @@
     </div>
     <!-- Transaction Form -->
 
-    <div class="content" id="transactions">
+    <div class="content"
+    hx-trigger= "load"
+    hx-get = "{% url 'transactions' %}" 
+    id="transactions">
         {% include 'components/transactions.html' %}
     </div>
 

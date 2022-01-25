@@ -1,20 +1,18 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from .models import Transaction
 from .forms import TransactionForm
 
 
 def home(request):
     form = TransactionForm()
-    transactions = None
-    if request.user.is_authenticated:
-        transactions = Transaction.objects.filter(user=request.user)
-
     if request.method == "POST":
         form = TransactionForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
             form.user = request.user
             form.save()
+            transactions = Transaction.objects.filter(user=request.user)[:3]
             return render(request, "components/successful_transaction.html", {"form": TransactionForm(), 'transactions': transactions})
         else:
             return render(
@@ -23,8 +21,25 @@ def home(request):
                 {"form": form}
             )
 
-    return render(request, "home.html", {"form": form, 'transactions': transactions})
+    return render(request, "home.html", {"form": form})
 
 
 def currencies(request, input_clicked):
     return render(request, "components/currencies.html", {"input_clicked": input_clicked})
+
+
+def transactions(request):
+    """
+    Give paginator a list of objects, plus the number of items you'd like to
+    have on each page, and it gives you methods for accessing the items for each
+    page.
+    """
+    transactions_list = Transaction.objects.filter(user=request.user)
+    paginator = Paginator(transactions_list, 3)
+    page_number = request.GET.get("page")
+    transactions = paginator.get_page(page_number)
+    return render(
+        request,
+        "components/transactions.html",
+        {"transactions": transactions},
+    )

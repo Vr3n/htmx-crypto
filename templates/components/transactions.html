@@ -45,4 +45,14 @@
 <div class="row card">
   <p>No transactions yet</p>
 </div>
-{% endfor %}
+{% endfor %} {% if transactions.has_next %}
+<button
+  class="btn btn-primary"
+  hx-get="/transactions?page={{ transactions.next_page_number }}"
+  hx-swap="outerHTML"
+>
+  Load More
+  <p class="htmx-indicator">Loading...</p>
+</button>
+
+{% endif %}

@@ -65,7 +65,7 @@ class TransactionForm(forms.ModelForm):
                     "hx-trigger": "focus",
                     "hx-get": reverse_lazy("currencies", kwargs = { "input_clicked" : "sold"  }),
                     "hx-target": "#results_sold",
-                    "_": "on focusout wait 200ms then remove #currencies"
+                    "_": "on focusout wait 100ms then remove #currencies"
                 }
             ),
             "sold_currency_fee": forms.TextInput(
@@ -85,7 +85,7 @@ class TransactionForm(forms.ModelForm):
                     "hx-trigger": "focus",
                     "hx-get": reverse_lazy("currencies", kwargs = { "input_clicked" : "bought"  }),
                     "hx-target": "#results_bought",
-                    "_": "on focusout wait 200ms then remove #currencies"
+                    "_": "on focusout wait 100ms then remove #currencies"
                 }
             ),
             "bought_currency_fee": forms.TextInput(
