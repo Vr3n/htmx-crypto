@@ -5,7 +5,9 @@ from .forms import TransactionForm
 
 def home(request):
     form = TransactionForm()
-    transactions = Transaction.objects.filter(user=request.user)
+    transactions = None
+    if request.user.is_authenticated:
+        transactions = Transaction.objects.filter(user=request.user)
 
     if request.method == "POST":
         form = TransactionForm(request.POST)
