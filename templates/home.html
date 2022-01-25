@@ -8,8 +8,14 @@
 <div class="content">
     {% if request.user.is_authenticated %}
     <!-- Transaction Form -->
-    {% include 'components/transaction_form.html' %}
+    <div class="card" id="transaction_form">
+        {% include 'components/transaction_form.html' %}
+    </div>
     <!-- Transaction Form -->
+
+    <div class="content" id="transactions">
+        {% include 'components/transactions.html' %}
+    </div>
 
 
     {% else %}

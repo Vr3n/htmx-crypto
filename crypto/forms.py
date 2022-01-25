@@ -83,7 +83,7 @@ class TransactionForm(forms.ModelForm):
                     "autocomplete": "off",
                     "hx-trigger": "click",
                     "hx-get": reverse_lazy("currencies", kwargs = { "input_clicked" : "bought"  }),
-                    "hx-target": "#results_sold"
+                    "hx-target": "#results_bought"
                 }
             ),
             "bought_currency_fee": forms.TextInput(
