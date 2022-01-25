@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_http_methods
 from .models import Transaction
 from .forms import TransactionForm
 
@@ -39,6 +40,9 @@ def transactions(request):
     paginator = Paginator(transactions_list, 3)
     page_number = request.GET.get("page")
     transactions = paginator.get_page(page_number)
+    print("View Called!")
+    print(transactions_list)
+    print(transactions)
     return render(
         request,
         "components/transactions.html",
@@ -75,3 +79,9 @@ def transaction_update(request, transaction_pk):
         "components/transaction_update.html",
         {"inline_form": inline_form, "transaction": transaction},
     )
+
+@require_http_methods(["DELETE"])
+def delete(request, transaction_pk):
+    transaction = get_object_or_404(Transaction, pk=transaction_pk)
+    transaction.delete()
+    return redirect("transactions")
