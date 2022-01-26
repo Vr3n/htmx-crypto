@@ -40,9 +40,6 @@ def transactions(request):
     paginator = Paginator(transactions_list, 3)
     page_number = request.GET.get("page")
     transactions = paginator.get_page(page_number)
-    print("View Called!")
-    print(transactions_list)
-    print(transactions)
     return render(
         request,
         "components/transactions.html",
@@ -84,4 +81,18 @@ def transaction_update(request, transaction_pk):
 def delete(request, transaction_pk):
     transaction = get_object_or_404(Transaction, pk=transaction_pk)
     transaction.delete()
+    return redirect("transactions")
+
+@require_http_methods(["POST"])
+def taxable(request):
+    transactions = request.POST.getlist("transaction_tax")
+    query_set = []
+    for item in transactions:
+        transaction = Transaction.objects.get(pk=item)
+        if transaction.taxable:
+            transaction.taxable = False
+        else:
+            transaction.taxable = True
+        query_set.append(transaction)
+    Transaction.objects.bulk_update(query_set, ["taxable"])
     return redirect("transactions")

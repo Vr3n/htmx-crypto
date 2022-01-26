@@ -1,30 +1,38 @@
 {% extends 'base.html' %}
+<!-- django_htmx debugger -->
 {% load django_htmx %}
+<!-- django_htmx script -->
 {% django_htmx_script %}
 
-
+<!-- main content -->
 {% block content %}
 
 <div class="content">
-    {% if request.user.is_authenticated %}
-    <!-- Transaction Form -->
-    <div class="card" id="transaction_form">
-        {% include 'components/transaction_form.html' %}
-    </div>
-    <!-- Transaction Form -->
+  {% if request.user.is_authenticated %}
+  <!-- Transaction Form -->
+  <div class="card" id="transaction_form">
+    {% include 'components/transaction_form.html' %}
+  </div>
+  <!-- Transaction Form -->
 
-    <div class="content"
-    hx-trigger= "load"
-    hx-get = "{% url 'transactions' %}?page=1" 
-    id="transactions">
-        {% include 'components/transactions.html' %}
+  <form id="taxable-form">
+    <div
+      class="content"
+      hx-trigger="load"
+      hx-get="{% url 'transactions' %}"
+      id="transactions"
+    >
+      {% include 'components/transactions.html' %}
     </div>
+  </form>
 
-
-    {% else %}
-    <div hx-boost="true">
-        To start please <a href= "{% url 'account_signup' %}"> make an account </a> or <a href="{% url 'account_login' %}"> login</a>.
-    </div>
-    {% endif %}
+  {% else %}
+  <div hx-boost="true">
+    To start please
+    <a href="{% url 'account_signup' %}"> make an account </a> or
+    <a href="{% url 'account_login' %}"> login</a>.
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
+<!-- main content -->
